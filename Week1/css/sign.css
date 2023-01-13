@@ -1,0 +1,24 @@
+.sign-form {
+    text-align: center;
+    display: none;
+}
+.sign-form input  {
+    display: flex;
+    margin-top: 20px;
+}
+
+.sign-form button {
+    border: none;
+    background-color: rgb(131, 143, 163);
+    position: relative;
+    top: 10px;
+    cursor: pointer;
+    width: 150px;
+    outline: none;
+    border-radius: 10px;
+}
+
+.sign-form button:hover {
+    background-color: rgb(81, 81, 105);
+    transition: 2s;
+}
