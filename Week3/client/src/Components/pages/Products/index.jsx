@@ -4,12 +4,16 @@ import AdminPage from "../../Admin/AdminPage";
 import Table from "react-bootstrap/Table";
 import axios from "axios";
 import "./product.css";
+import { DeleteProduct } from "../../../services/product";
+import CreateProduct from "./CreateProduct";
 const Index = () => {
-  const [users, setUsers] = useState([]);
   const [products, setProducts] = useState([]);
 
-  const handleDelete = (e) => {
+  const handleDelete = (e, id, index) => {
     e.preventDefault();
+    DeleteProduct(id);
+
+    setProducts(products.filter((o, i) => index !== i));
   };
   useEffect(() => {
     axios
@@ -24,6 +28,7 @@ const Index = () => {
     <div style={{ display: "flex" }}>
       <AdminPage />
       <div style={{ maxWidth: "100%" }} className="col-10">
+        <CreateProduct/>
         <Table striped style={{ marginTop: "30px" }}>
           <thead>
             <tr
@@ -45,7 +50,11 @@ const Index = () => {
           </thead>
           <tbody>
             {products.map((product, index) => (
-              <tr key={product._id.toString()} className="inforProduct">
+              <tr
+                key={product._id.toString()}
+                className="inforProduct"
+                id="product"
+              >
                 <th>{index}</th>
                 <th>{product.productCode}</th>
                 <th>{product.nameProduct}</th>
@@ -56,7 +65,10 @@ const Index = () => {
                 <th>{product.quantity}</th>
                 <th>{product.category}</th>
                 <th>
-                  <button className="handleBtn" onClick={handleDelete}>
+                  <button
+                    className="handleBtn"
+                    onClick={(e) => handleDelete(e, product._id, index)}
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="14"
@@ -92,6 +104,7 @@ const Index = () => {
             ))}
           </tbody>
         </Table>
+        
       </div>
     </div>
   );

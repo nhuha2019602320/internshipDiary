@@ -2,15 +2,18 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { registerAccout } from "../../redux/apiRequest";
 import "./register.css";
+import { useNavigate } from "react-router-dom";
+
 const Register = () => {
     const [email, setEmail] = useState("");
     const [userName, setUserName] = useState("");
     const [phoneNumber, setPhoneNuber] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const handleSubmit = (e) => {
-        e.preventDefault();      
+        e.preventDefault();   
         if(
             !email.match(process.env.REACT_APP_REGEX) &&
             userName !== "" &&
@@ -24,7 +27,7 @@ const Register = () => {
                 password: password
             }
             console.log(process.env.REACT_APP_REGEX);
-            registerAccout(newUser, dispatch)
+            registerAccout(newUser, dispatch, navigate)
 
         } else {
             console.log("infomation is not correct");
@@ -33,6 +36,8 @@ const Register = () => {
     }
 
     return ( 
+        <div>
+{/* <NavBar /> */}
         <section className="register-container">
               <div className="register-title"> Sign up </div>
             <form>
@@ -49,6 +54,7 @@ const Register = () => {
                 <button type="submit" onClick={handleSubmit}> Create account </button>
             </form>
         </section>
+        </div>
         
      );
 }

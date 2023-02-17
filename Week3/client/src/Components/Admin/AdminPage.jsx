@@ -3,14 +3,27 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import "./admin.css";
 import { Link } from "react-router-dom";
-import Navigate from "../Navigate/Navigate";
+import {useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+
 const AdminPage = () => {
+  const [token, setToken] = useState("");
+  const {login} = useSelector(state => state.auth)
+  const navigate = useNavigate();
+  console.log("Current", login);
+  useEffect(() => {
+    if(!login?.currectUser?.admin){
+      navigate("/login")
+    }
+  }, [navigate])
+
   return (
     <div className="col-2 menuManagement" style={{ height: "100vh" }}>
       <Container>
         <Col style={{ marginLeft: "10px" }}>
           <Row>
-            <Link className="catalogList" to="/admin/users">
+            <Link className="catalogList" to="/users">
               <div>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -27,7 +40,7 @@ const AdminPage = () => {
             </Link>
           </Row>
           <Row>
-            <Link className="catalogList" to="/admin/products">
+            <Link className="catalogList" to="/products">
               <div>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -45,7 +58,7 @@ const AdminPage = () => {
             </Link>
           </Row>
           <Row>
-            <Link className="catalogList" to="/admin/categories">
+            <Link className="catalogList" to="/categories">
               <div>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
