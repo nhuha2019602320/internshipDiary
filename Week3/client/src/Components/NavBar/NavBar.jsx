@@ -5,7 +5,7 @@ const NavBar = () => {
   const [user,setUSer] = useState(null);
   return (
     <nav className="navbar-container">
-      <Link to="/" className="navbar-home"> Home </Link>
+      <Link to="/" className="navbar-home"> Trang Chủ </Link>
       {user? (
         <>
         <p className="navbar-user">Hi, <span> {user}  </span> </p>
@@ -13,8 +13,8 @@ const NavBar = () => {
         </>
       ) : (    
         <>
-      <Link to="/login" className="navbar-login"> Login </Link>
-      <Link to="/register" className="navbar-register"> Register</Link>
+      <Link to="/login" className="navbar-login"> Đăng Nhập </Link>
+      <Link to="/register" className="navbar-register"> Đăng ký</Link>
       </>
 )}
     </nav>

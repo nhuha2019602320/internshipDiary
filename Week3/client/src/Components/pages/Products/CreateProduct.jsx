@@ -12,47 +12,60 @@ const CreateProduct = () => {
   const [imgProduct, setImgProduct] = useState(null);
   const [urlImg, setUrlImg] = useState("");
   const [description, setDescription] = useState("");
-
-
+  const [category, setCategory] = useState("")
   const handleClose = () => setShow(false);
   const handleShow = () => {
     setShow(true);
   };
 
-  const upLoadImage =  (e) => {
-    setImgProduct(e.target.files[0]);
+  const upLoadImage = (e) => {
     console.log("img ", imgProduct);
     const formData = new FormData();
     formData.append("file", imgProduct);
     formData.append("upload_preset", "rahh7f3b");
-      axios
-    .post(
-      "https://api.cloudinary.com/v1_1/uploadimgvvv/image/upload",
-      formData
+    axios
+      .post(
+        "https://api.cloudinary.com/v1_1/uploadimgvvv/image/upload",
+        formData
       )
       .then((res) => setUrlImg(res.data.url));
-      console.log(urlImg);
-      //   console.log(productCode, nameProduct, price, quantity, description);
+    console.log(urlImg);
+  };
+
+  const createProduct = () => {
+    const product = {
+      productCode: productCode,
+      nameProduct: nameProduct,
+      price: price,
+      imgaeProduct: urlImg,
+      quantity: quantity,
+      description: description,
+      // category: category
     };
-    
-    const createProduct = () => {
-        const product = {
-          productCode: productCode,
-          nameProduct: nameProduct,
-          price: price,
-          imgaeProduct: urlImg,
-          quantity: quantity,
-          description: description
-      }
-      NewProduct(product)
-   
-  }
+    NewProduct(product);
+  };
+
+  const [options, setOptions] = useState([]);
+  const onOptionChangeHandler = (event) => {
+    event.preventDefault()
+    console.log("User Selected Value - ", event.target.value);
+    setCategory(event.target.value)
+  };
+  // console.log("option", options.map(item => item._id))
+  const listCategories = options.map(item => item.categroyName)
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_URL_LOCALHOST}/api/category/getCategory`)
+      .then((res) => {
+        setOptions(res.data)
+      });
+  }, []);
   return (
     <div>
       <button onClick={handleShow}>Thêm sản phẩm</button>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Thay đổi thông tin</Modal.Title>
+          <Modal.Title>Thêm sản phẩm</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className="edit">
@@ -69,17 +82,23 @@ const CreateProduct = () => {
             <label htmlFor="">Giá</label>
             <input type="text" onChange={(e) => setPrice(e.target.value)} />
             <label htmlFor="">Ảnh sản phẩm</label>
+            <br></br>
             <input
               type="file"
-              // onChange={async (event) => {
-              //     setImgProduct(event.target.files[0])
-              //     // const formData = new FormData();
-              //     // formData.append("file", imgProduct);
-              //     // formData.append("upload_preset", "rahh7f3b");
-              //     // await axios.post('https://api.cloudinary.com/v1_1/uploadimgvvv/image/upload',formData).then((res) => console.log(res))
-              // }}
-              onChange={(e) => upLoadImage(e)}
+              onChange={(event) => {
+                setImgProduct(event.target.files[0]);
+                // const formData = new FormData();
+                // formData.append("file", imgProduct);
+                // formData.append("upload_preset", "rahh7f3b");
+                // await axios.post('https://api.cloudinary.com/v1_1/uploadimgvvv/image/upload',formData).then((res) => console.log(res))
+              }}
+              // onChange={(e) => upLoadImage(e)}
+              style={{ width: "350px" }}
             />
+            <button type="submit" onClick={upLoadImage}>
+              Gửi ảnh
+            </button>
+            <br></br>
             <label htmlFor="">Số lượng</label>
             <input type="text" onChange={(e) => setQuantity(e.target.value)} />
             <label htmlFor="">Mô tả</label>
@@ -87,6 +106,13 @@ const CreateProduct = () => {
               type="text"
               onChange={(e) => setDescription(e.target.value)}
             />
+            <label htmlFor="">Danh Mục</label><br />
+            <select onChange={onOptionChangeHandler}>
+              <option>Please choose one option</option>
+              {listCategories.map((option, index) => {
+                return <option key={index}>{option}</option>;
+              })}
+            </select>
           </div>
         </Modal.Body>
         <Modal.Footer>

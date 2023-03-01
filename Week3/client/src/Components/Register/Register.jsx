@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { registerAccout } from "../../redux/apiRequest";
 import "./register.css";
 import { useNavigate } from "react-router-dom";
-
+import NavBar from "../NavBar/NavBar";
 const Register = () => {
     const [email, setEmail] = useState("");
     const [userName, setUserName] = useState("");
@@ -36,22 +36,22 @@ const Register = () => {
     }
 
     return ( 
-        <div>
-{/* <NavBar /> */}
+        <div className="register">
+<NavBar />
         <section className="register-container">
-              <div className="register-title"> Sign up </div>
+              <div className="register-title">Đăng Ký Tài Khoản</div>
             <form>
                 <label>EMAIL</label>
                 <input type="text" placeholder="Enter your email"  onChange={(e) => setEmail(e.target.value)}/>
-                <label>USERNAME</label>
+                <label>Tên Tài Khoản</label>
                 <input type="text" placeholder="Enter your username" onChange={(e) => setUserName(e.target.value)}/>
-                <label>PHONE NUMBER</label>
+                <label>Số Điện Thoại</label>
                 <input type="text" placeholder="Enter your username" onChange={(e) => setPhoneNuber(e.target.value)}/>
-                <label>PASSWORD</label>
+                <label>Mật Khẩu</label>
                 <input type="password" placeholder="Enter your password" onChange={(e)=> setPassword(e.target.value)}/>
-                <label>CONFIRMPASSWORD</label>
+                <label>Nhập Lại Mật Khẩu</label>
                 <input type="password" placeholder="Enter your password" onChange={(e)=> setConfirmPassword(e.target.value)}/>
-                <button type="submit" onClick={handleSubmit}> Create account </button>
+                <button type="submit" onClick={handleSubmit}>Tạo Tài Khoản</button>
             </form>
         </section>
         </div>

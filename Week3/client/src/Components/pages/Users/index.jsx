@@ -8,6 +8,7 @@ import { DeleteUser, EditUser } from "../../../services/user";
 
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import NavBar from "../../NavBar/NavBar";
 
 const Index = () => {
   const [users, setUsers] = useState([]);
@@ -71,6 +72,7 @@ const Index = () => {
       </div>
       <AdminPage />
       <div style={{ maxWidth: "100%" }} className="col-10">
+        <NavBar/>
         <Table striped style={{ marginTop: "30px" }}>
           <thead>
             <tr style={{ textAlign: "center" }}>

@@ -35,6 +35,7 @@ const productController = {
       newProduct.imgaeProduct = req.body.imgaeProduct;
       newProduct.quantity = req.body.quantity;
       newProduct.description = req.body.description;
+      // newProduct.category = req.body.category;
 
         const saveProduct = await newProduct.save();
         if (req.body.category) {
@@ -82,6 +83,15 @@ const productController = {
     }
   },
   editProduct: async (req, res) => {
+    if(
+        req.body.productCode === undefined ||
+        req.body.nameProduct === undefined ||
+        req.body.price === undefined || 
+        req.body.imgaeProduct === undefined ||
+        req.body.quantity === undefined ||
+        req.body.description === undefined
+      )
+        return res.send("err")
     productModel.findByIdAndUpdate(
       await { _id: req.params.id },
       {

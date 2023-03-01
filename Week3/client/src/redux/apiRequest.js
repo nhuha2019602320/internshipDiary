@@ -11,7 +11,7 @@ export const loginUser = async (user, dispatch, navigate) => {
         if(res.data.admin === true)
             navigate("/admin")
         else
-            navigate("/homepage")
+            navigate("/")
             
     } catch (error) {
         dispatch(loginFailed())

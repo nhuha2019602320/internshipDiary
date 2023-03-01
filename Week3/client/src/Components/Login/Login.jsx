@@ -29,15 +29,15 @@ const Login = () => {
     <div className="ff">
 
       <section className="login-container">
-        <div className="login-title"> Log in</div>
+        <div className="login-title">Đăng Nhập Vào Hệ Thống</div>
         <form>
-          <label>USERNAME</label>
+          <label>Email</label>
           <input
             type="text"
             placeholder="Enter your username"
             onChange={(e) => setEmail(e.target.value)}
           />
-          <label>PASSWORD</label>
+          <label>Mật Khẩu</label>
           <input
             type="password"
             placeholder="Enter your password"
@@ -45,13 +45,13 @@ const Login = () => {
           />
           <button type="submit" onClick={handleSubmit}>
             {" "}
-            Continue{" "}
+            Đăng Nhập{" "}
           </button>
           {/* </form> */}
         </form>
-        <div className="login-register"> Don't have an account yet? </div>
+        <div className="login-register"> Bạn Chưa Chưa Có Tài Khoản?</div>
         <Link className="login-register-link" to="/register">
-          Register one for free{" "}
+          Ấn Đây Để Đăng Ký !{" "}
         </Link>
       </section>
     </div>

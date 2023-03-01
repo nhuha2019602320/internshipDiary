@@ -1,13 +1,55 @@
 import React, { useEffect, useState } from "react";
-import Container from "react-bootstrap/esm/Container";
 import AdminPage from "../../Admin/AdminPage";
 import Table from "react-bootstrap/Table";
 import axios from "axios";
 import "./product.css";
-import { DeleteProduct } from "../../../services/product";
+import { DeleteProduct, UpdateProduct } from "../../../services/product";
 import CreateProduct from "./CreateProduct";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
+import NavBar from "../../NavBar/NavBar";
+// import { Pagination } from "antd";
+
 const Index = () => {
   const [products, setProducts] = useState([]);
+  const [productCode, setProductCode] = useState("");
+  const [nameProduct, setNameProduct] = useState("");
+  const [price, setPrice] = useState("");
+  const [quantity, setQuantity] = useState("");
+  const [imgProduct, setImgProduct] = useState(null);
+  const [urlImg, setUrlImg] = useState("");
+  const [description, setDescription] = useState("");
+  const [show, setShow] = useState(false);
+
+  ////////////////////////////////
+  // const [total, setTotal] = useState("");
+  // const [page, setPage] = useState(1);
+  // const [postPerPage, setPostPerPage] = useState(10);
+  // /////////////////////////
+
+  // const indexOfLastPage = page + postPerPage;
+  // const indexOfFirstPage = indexOfLastPage - postPerPage;
+  // const currentPosts = products.slice(indexOfFirstPage, indexOfLastPage);
+
+  // const onShowSizeChange = (curent, pageSize) => {
+  //   setPostPerPage(pageSize);
+  // };
+
+  // const itemRender = (curent, type, originnalElement) => {
+  //   if (type === "prev") return <a>Previous</a>;
+  //   if (type === "next") return <a>Next</a>;
+
+  //   return originnalElement;
+  // };
+
+  /////////////////////
+
+  const handleClose = () => setShow(false);
+  const handleShow = (id) => {
+    setShow(true);
+    console.log("idnay", id);
+    localStorage.setItem("idProductUpdate", id);
+  };
 
   const handleDelete = (e, id, index) => {
     e.preventDefault();
@@ -15,12 +57,49 @@ const Index = () => {
 
     setProducts(products.filter((o, i) => index !== i));
   };
+
+  const handleUpdateProduct = () => {
+    const idProductUpdate = localStorage.getItem("idProductUpdate")
+
+    const product = {
+      productCode: productCode,
+      nameProduct: nameProduct,
+      price: price,
+      imgaeProduct: urlImg,
+      quantity: quantity,
+      description: description
+  }
+    console.log("13123123", product);
+    UpdateProduct(product, idProductUpdate)
+    localStorage.clear();
+  }
+
+  const upLoadImage =  (e) => {
+    // setImgProduct(e.target.files[0]);
+    console.log("img ", imgProduct);
+    const formData = new FormData();
+    formData.append("file", imgProduct);
+    formData.append("upload_preset", "rahh7f3b");
+      axios
+    .post(
+      "https://api.cloudinary.com/v1_1/uploadimgvvv/image/upload",
+      formData
+      )
+      .then((res) => setUrlImg(res.data.url));
+      console.log(urlImg);
+      //   console.log(productCode, nameProduct, price, quantity, description);
+    };
+    
+
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_URL_LOCALHOST}/api/product/getAllProducts`)
       .then((res) => {
-        console.log(res.data);
+        console.log("product", res.data);
         setProducts(res.data);
+        /////////////////
+        // setTotal(res.data.length);
+        /////////////////////////
       });
   }, []);
 
@@ -28,6 +107,7 @@ const Index = () => {
     <div style={{ display: "flex" }}>
       <AdminPage />
       <div style={{ maxWidth: "100%" }} className="col-10">
+      <NavBar/>
         <CreateProduct/>
         <Table striped style={{ marginTop: "30px" }}>
           <thead>
@@ -44,7 +124,7 @@ const Index = () => {
               <th>Giá</th>
               <th>Ảnh sản phẩm</th>
               <th>Số lượng còn</th>
-              <th>Danh mục</th>
+              {/* <th>Danh mục</th> */}
               <th>Chức năng</th>
             </tr>
           </thead>
@@ -63,7 +143,7 @@ const Index = () => {
                   <img src={product.imgaeProduct} width="80px" alt="" />
                 </th>
                 <th>{product.quantity}</th>
-                <th>{product.category}</th>
+                {/* <th>{product.category}</th> */}
                 <th>
                   <button
                     className="handleBtn"
@@ -88,6 +168,7 @@ const Index = () => {
                       fill="currentColor"
                       className="bi bi-vector-pen"
                       viewBox="0 0 16 16"
+                      onClick={() => handleShow(product._id)}
                     >
                       <path
                         fillRule="evenodd"
@@ -104,8 +185,79 @@ const Index = () => {
             ))}
           </tbody>
         </Table>
-        
+        {/* <div>
+        <Pagination
+          onChange={(value) => setPage(value)}
+          pageSize={postPerPage}
+          total={total}
+          current={page}
+          showSizeChanger
+          showQuickJumper
+          onShowSizeChange={onShowSizeChange}
+          itemRender={itemRender}
+        />
+      </div> */}
       </div>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Sửa thông tin sản phẩm</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="edit">
+            <label htmlFor="">Mã sản phẩm</label>
+            <input
+              type="text"
+              onChange={(e) => setProductCode(e.target.value)}
+            />
+            <label>Tên sản phẩm</label>
+            <input
+              type="text"
+              onChange={(e) => setNameProduct(e.target.value)}
+            />
+            <label htmlFor="">Giá</label>
+            <input type="text" onChange={(e) => setPrice(e.target.value)} />
+            <label htmlFor="">Ảnh sản phẩm</label><br></br>
+            <input
+              type="file"
+              onChange={ (event) => {
+                  setImgProduct(event.target.files[0])
+                  // const formData = new FormData();
+                  // formData.append("file", imgProduct);
+                  // formData.append("upload_preset", "rahh7f3b");
+                  // await axios.post('https://api.cloudinary.com/v1_1/uploadimgvvv/image/upload',formData).then((res) => console.log(res))
+              }}
+              // onChange={(e) => upLoadImage(e)}
+              style={{width: "350px"}}
+            />
+            <button type="submit" onClick={upLoadImage}>Gửi ảnh</button><br></br>
+            <label htmlFor="">Số lượng</label>
+            <input type="text" onChange={(e) => setQuantity(e.target.value)} />
+            <label htmlFor="">Mô tả</label>
+            <input
+              type="text"
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary">Close</Button>
+          <Button variant="primary" onClick={handleUpdateProduct}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      {/* <div>
+        <Pagination
+          onChange={(value) => setPage(value)}
+          pageSize={postPerPage}
+          total={total}
+          current={page}
+          showSizeChanger
+          showQuickJumper
+          onShowSizeChange={onShowSizeChange}
+          itemRender={itemRender}
+        />
+      </div> */}
     </div>
   );
 };
